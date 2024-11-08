@@ -36,5 +36,4 @@
 :mag: Download the project and test it yourself in practice.
 
 
-Developed by Vinícius de Moraes 
-and Based on video: [VideoYtb](https://www.youtube.com/watch?v=e_WgAB0Th_I&list=PLxCh3SsamNs7y1Y-QaVdWx0MUh0wvo7TV)
+Developed by Vinícius de Moraes based on the video from the Build & Run channel: [VideoYtb](https://www.youtube.com/watch?v=e_WgAB0Th_I&list=PLxCh3SsamNs7y1Y-QaVdWx0MUh0wvo7TV)
