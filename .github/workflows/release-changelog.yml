@@ -1,0 +1,37 @@
+name: Gerar Changelog na criação da branch Release
+
+on:
+  create:
+    branches:
+      - 'release/*'
+
+jobs:
+  generate-changelog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js (se usar alguma lib JS para changelog)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Gerar changelog
+        run: |
+          # Exemplo usando o 'auto-changelog' instalado via npm
+          npm install -g auto-changelog
+
+          # Gera changelog baseado nos commits
+          auto-changelog --output CHANGELOG.md
+
+      - name: Commit e push do changelog
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add CHANGELOG.md
+          git commit -m "chore: Atualiza changelog para release"
+          git push origin HEAD:${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GT_TOKEN }}
