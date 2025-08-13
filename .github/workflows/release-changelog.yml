@@ -1,4 +1,7 @@
-name: Gerar Changelog na criação da branch Release
+name: Generate Changelog on Release Branch
+
+permissions:
+  contents: write   # ✅ allows pushing commits to the repository
 
 on:
   create:
@@ -6,32 +9,30 @@ on:
       - 'release/*'
 
 jobs:
-  generate-changelog:
+  changelog:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Configurar Node.js (se usar alguma lib JS para changelog)
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Gerar changelog
-        run: |
-          # Exemplo usando o 'auto-changelog' instalado via npm
-          npm install -g auto-changelog
+      - name: Install conventional-changelog-cli
+        run: npm install -g conventional-changelog-cli
 
-          # Gera changelog baseado nos commits
-          auto-changelog --output CHANGELOG.md
-
-      - name: Commit e push do changelog
+      - name: Generate CHANGELOG.md
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          conventional-changelog -p angular -i CHANGELOG.md -s
+
+      - name: Commit Changelog
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add CHANGELOG.md
-          git commit -m "chore: Atualiza changelog para release"
+          git commit -m "chore: update changelog for ${{ github.ref_name }}" || echo "No changes to commit"
           git push origin HEAD:${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GT_TOKEN }}
