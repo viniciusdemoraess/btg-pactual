@@ -32,6 +32,7 @@
 * Spring Data MongoDB
 * RabbitMQ
 * Docker
+*  
 
 :mag: Download the project and test it yourself in practice.
 
